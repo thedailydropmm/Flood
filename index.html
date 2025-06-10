@@ -22,6 +22,37 @@
       position: relative;
       min-height: 100vh;
     }
+    .proof-section {
+      position: relative;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 15px;
+      background: rgba(0, 15, 22, 0.7);
+      border: 2px solid #00ffe1;
+      border-radius: 10px;
+      text-align: center;
+      z-index: 1;
+      box-shadow: 0 0 30px #00ffe144;
+    }
+
+    .proof-title {
+      color: #00ffe1;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    .proof-image {
+      width: 100%;
+      border: 1px solid #00ffe1;
+      border-radius: 8px;
+      box-shadow: 0 0 20px #00ffe133;
+      transition: transform 0.3s ease;
+    }
+
+    .proof-image:hover {
+      transform: scale(1.02);
+    }
 
     .cyber-grid {
       position: absolute;
@@ -385,6 +416,11 @@
   <div class="cyber-grid"></div>
   <div class="cyber-pulse"></div>
   <div class="scan-line"></div>
+  
+  <div class="proof-section">
+    <div class="proof-title">REQUEST COUNT PROOF</div>
+    <img src="proof.jpg" alt="GhostFlood Request Count Proof" class="proof-image">
+  </div>
 
   <header>
     <h1>GHOST</h1>
