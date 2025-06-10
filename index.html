@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ghost</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #121212);
+      color: #00ffe1;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .cyber-grid {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        repeating-linear-gradient(90deg, #00ffe110 1px, transparent 2px),
+        repeating-linear-gradient(180deg, #00ffe110 1px, transparent 2px);
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 100px 100px; }
+    }
+
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(0, 255, 225, 0.6);
+      box-shadow: 0 0 20px 5px #00ffe1;
+      z-index: 10;
+      animation: scan 4s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
+
+    header {
+      position: relative;
+      padding: 70px 20px 20px;
+      text-align: center;
+      z-index: 1;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      color: #00ffe1;
+      text-shadow: 0 0 15px #00ffe1, 0 0 30px #0ff;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      background: linear-gradient(90deg, #00ffe1, #0ff, #00ffe1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 300%;
+      animation: gradientShine 3s ease infinite;
+    }
+
+    @keyframes gradientShine {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animated-text {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #0ff;
+      animation: flicker 2s infinite alternate;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; text-shadow: 0 0 10px #0ff; }
+      100% { opacity: 0.7; text-shadow: 0 0 20px #0ff, 0 0 30px #0ff; }
+    }
+
+    .pricing-section {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: rgba(0, 15, 22, 0.8);
+      border: 2px solid #00ffe1;
+      border-radius: 16px;
+      padding: 35px 25px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 0 30px #00ffe144;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,255,225,0.1) 0%, rgba(0,255,225,0) 70%);
+      z-index: -1;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 50px #00ffe1aa;
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: #ff0055;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      transform: rotate(5deg);
+      box-shadow: 0 4px 10px rgba(255,0,85,0.4);
+    }
+
+    .plan-title {
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #0ff;
+      letter-spacing: 1px;
+    }
+
+    .plan-details {
+      font-size: 1.1rem;
+      color: #88ffff;
+      margin-bottom: 25px;
+      font-family: 'Roboto Mono', monospace;
+      text-align: left;
+      padding: 0 15px;
+      line-height: 1.8;
+    }
+
+    .plan-details i {
+      color: #00ffe1;
+      margin-right: 8px;
+      width: 20px;
+    }
+
+    .price {
+      font-size: 1.8rem;
+      color: #0ff;
+      margin-bottom: 25px;
+      font-weight: bold;
+      background: rgba(0, 255, 225, 0.1);
+      padding: 8px 15px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: #ff5555;
+      font-size: 1.2rem;
+      margin-left: 10px;
+      opacity: 0.7;
+    }
+
+    .glow-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: transparent;
+      border: 2px solid #00ffe1;
+      color: #00ffe1;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .glow-btn:hover {
+      background: rgba(0, 255, 225, 0.15);
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    .glow-btn::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
+      background: linear-gradient(45deg, #00ffe1, #0ff, #00ffe1);
+      border-radius: 12px;
+      z-index: -1;
+      opacity: 0.3;
+      filter: blur(10px);
+      animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    .telegram-btn {
+      margin: 50px auto 30px;
+      display: flex;
+      justify-content: center;
+      z-index: 1;
+      position: relative;
+    }
+
+    .telegram-btn a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 25px;
+      background: #0088cc22;
+      color: #00ffe1;
+      text-decoration: none;
+      border: 2px solid #00ffe1;
+      border-radius: 10px;
+      transition: 0.3s ease;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .telegram-btn a:hover {
+      background: #00ffe122;
+      box-shadow: 0 0 20px #00ffe1aa;
+      transform: translateY(-3px);
+    }
+
+    .telegram-btn img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) saturate(100%) invert(71%) sepia(97%) saturate(598%) hue-rotate(130deg);
+    }
+
+    .tos-container {
+      position: relative;
+      max-width: 800px;
+      margin: 40px auto 30px;
+      padding: 20px;
+      background: rgba(0, 15, 22, 0.7);
+      border: 1px solid #ff5555;
+      border-radius: 10px;
+      text-align: center;
+      z-index: 1;
+      box-shadow: 0 0 20px rgba(255, 85, 85, 0.3);
+    }
+
+    .tos-title {
+      color: #ff5555;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(255, 85, 85, 0.5);
+    }
+
+    .tos-content {
+      color: #88ffff;
+      font-family: 'Roboto Mono', monospace;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      position: relative;
+      text-align: center;
+      color: #0ff5;
+      font-size: 0.9rem;
+      padding: 30px 20px;
+      z-index: 1;
+      border-top: 1px solid #00ffe133;
+      margin-top: 30px;
+    }
+
+    .cyber-pulse {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: radial-gradient(circle at center, rgba(0, 255, 225, 0.1) 0%, transparent 70%);
+      animation: pulseGlow 4s infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.1; }
+      100% { opacity: 0.3; }
+    }
+
+    .feature-highlight {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px auto;
+      max-width: 1000px;
+      flex-wrap: wrap;
+    }
+
+    .feature-card {
+      background: rgba(0, 20, 30, 0.7);
+      border: 1px solid #00ffe1;
+      border-radius: 10px;
+      padding: 20px;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffe133;
+    }
+
+    .feature-card i {
+      font-size: 2.5rem;
+      color: #00ffe1;
+      margin-bottom: 15px;
+    }
+
+    .feature-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #0ff;
+    }
+
+    .feature-desc {
+      font-size: 0.95rem;
+      color: #88ffff;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .pricing-section {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .pricing-card {
+        width: 90%;
+        max-width: 350px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cyber-grid"></div>
+  <div class="cyber-pulse"></div>
+  <div class="scan-line"></div>
+
+  <header>
+    <h1>GHOST</h1>
+    <div class="animated-text">Cyber Pulse | Unstoppable | Real-Time Attack</div>
+  </header>
+
+  <section class="pricing-section">
+    <div class="pricing-card">
+      <div class="plan-title">STARTER</div>
+      <div class="plan-details">
+        <div><i class="fas fa-microchip"></i> 1 Concurrent</div>
+        <div><i class="fas fa-clock"></i> 300s Duration</div>
+        <div><i class="fas fa-calendar-alt"></i> 1 Month Access</div>
+        <div><i class="fas fa-bolt"></i> Basic DDoS</div>
+      </div>
+      <div class="price">$15 <span class="original-price">$23</span></div>
+      <button class="glow-btn">BUY NOW</button>
+    </div>
+
+    <div class="pricing-card">
+      <div class="popular-tag">POPULAR</div>
+      <div class="plan-title">PRO</div>
+      <div class="plan-details">
+        <div><i class="fas fa-microchip"></i> 2 Concurrent</div>
+        <div><i class="fas fa-clock"></i> 600s Duration</div>
+        <div><i class="fas fa-calendar-alt"></i> 1 Month Access</div>
+        <div><i class="fas fa-bolt"></i> Enhanced DDoS</div>
+        <div><i class="fas fa-shield-alt"></i> Priority Support</div>
+      </div>
+      <div class="price">$39</div>
+      <button class="glow-btn">BUY NOW</button>
+    </div>
+
+    <div class="pricing-card">
+      <div class="plan-title">ELITE</div>
+      <div class="plan-details">
+        <div><i class="fas fa-microchip"></i> 5 Concurrent</div>
+        <div><i class="fas fa-clock"></i> 1200s Duration</div>
+        <div><i class="fas fa-calendar-alt"></i> 1 Months Access</div>
+        <div><i class="fas fa-bolt"></i> Maximum DDoD</div>
+        <div><i class="fas fa-crown"></i> VIP Support</div>
+        <div><i class="fas fa-rocket"></i> Advanced Features</div>
+      </div>
+      <div class="price">$90</div>
+      <button class="glow-btn">BUY NOW</button>
+    </div>
+  </section>
+
+  <div class="feature-highlight">
+    <div class="feature-card">
+      <i class="fas fa-tachometer-alt"></i>
+      <div class="feature-title">HIGH PERFORMANCE</div>
+      <div class="feature-desc">Optimized for maximum attack efficiency with minimal resource usage</div>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-user-secret"></i>
+      <div class="feature-title">ANONYMOUS</div>
+      <div class="feature-desc">Zero logging policy ensures complete anonymity</div>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-sync-alt"></i>
+      <div class="feature-title">REAL-TIME</div>
+      <div class="feature-desc">Instant activation and real-time attack monitoring</div>
+    </div>
+  </div>
+
+  <div class="tos-container">
+    <div class="tos-title">TERMS OF SERVICE</div>
+    <div class="tos-content">
+      <p><i class="fas fa-ban"></i> STRICTLY NO GOVERNMENT OR EDUCATIONAL TARGETS</p>
+      <p><i class="fas fa-check-circle"></i> DSTAT ALLOWED FOR ALL KINDS</p>
+      <p><i class="fas fa-exclamation-triangle"></i> UNAUTHORIZED USE WILL RESULT IN PERMANENT BAN</p>
+    </div>
+  </div>
+
+  <div class="telegram-btn">
+    <a href="https://t.me/GhostFloodAdmin" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram">
+      CONTACT ADMIN ON TELEGRAM
+    </a>
+  </div>
+
+  <footer>
+    © 2025 GhostFlood | Cyber Simulation Tool Only | For Educational Purposes
+  </footer>
+</body>
+</html>
